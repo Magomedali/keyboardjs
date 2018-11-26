@@ -1,27 +1,345 @@
+
+var size = window.screen.width <= 800 ? "_800x600" : "";
+var CSSFileName = "<link type=\"text/css\" href=\"keyboard/css/keyboard" + size + ".css\" rel=\"stylesheet\"/>";
+document.write(CSSFileName);
+
 (function($){
-	jQuery.fn.keyboard = function(options){
-		var block = this.eq(0);
-		if(!block.length) return;
-		block.html("");
-		block.addClass("keyboard-block");
-		options = jQuery.extend({
+ 	
+ 	function Keyboard(node,useroptions){
+ 		if(!node.length) return;
+
+        this.block = node;
+        
+
+
+    	this.field = null;
+    	
+    	this.field_wrapper = null;
+    	
+    	this.inputValue = null;
+    	
+    	this.ru_base_part = null;
+    	
+    	this.ru_region_part = null;
+    	
+    	this.inputRuNumber = null;
+    	
+    	this.inputRuRegion = null;
+
+    	this.options = jQuery.extend({
 			//Default properties
-			title: "ПОЖАЛУЙСТА,<br>ВВЕДИТЕ РЕГИСТРАЦИОННЫЙ НОМЕР АВТОМОБИЛЯ",
+			title: "",
+
+			desc:"",
+
+			showDesc:false,
+
 			buttons_bg:"blue",
-			checkPatterns:{}
-		},options);
 
-		block.append($("<h3/>").html(options.title));
-		var field = $("<div/>").attr("id","keyboard-field");
-		var input = $("<div/>").attr("id","input");
-		var oInput = $("<input/>").attr("type","text")
-									.attr("name","code")
-									.attr("id","input")
-									.attr('tabIndex', '-1')
-									.attr('autocomplete', 'off');
-		field.append(input.append(oInput));
-		block.append(field);
+			keyboardId:"keyboard",
 
+			inputId:"keyboard_textbox",
+
+			isRuType : false,
+
+			maxValueLength : 10,
+
+			checkPatterns:[],
+
+			validColor:"rgb(98, 150, 44)",
+
+			unvalidColor:"#ff1836",
+
+			validCallback:function(){},
+
+			changeCallback:function(){},
+
+			unvalidCallback:function(){}
+		},useroptions);
+
+
+    	this.keyboardBlock = $("<div/>").attr("id",this.options.keyboardId).addClass("keyboard");
+
+
+    	this.keyboard_field = $("<div/>").attr("id",this.options.keyboardId+"-field");
+
+
+		this.initPluginBlock =  function(){
+			if(!this.block.length) return;
+
+			this.block.html("");
+			this.block.addClass("keyboard-block");
+			this.block.append($("<h3/>").html(this.options.title));
+
+			this.field = $("<div/>").attr("id","input");
+			this.inputValue = $("<input/>").attr("type","text")
+										.attr("name","code")
+										.attr("id",this.options.inputId)
+										.attr('tabIndex', '-1')
+										.attr('autocomplete', 'off');
+
+			this.keyboard_field.append(this.field.append(this.inputValue));
+			
+			if(this.options.showDesc && this.options.desc){
+				var descP = $("<p/>").attr("class","keyboard_input-info").html(this.options.desc);
+				this.keyboard_field.append(descP);
+			}
+
+			this.block.append(this.keyboard_field);
+
+			return this;
+		};
+
+
+
+
+
+		this.initPluginBlockForRu =  function(){
+			if(!this.block.length) return;
+
+			this.block.html("");
+			this.block.addClass("keyboard-block");
+			this.block.append($("<h3/>").html(this.options.title));
+
+			
+			this.field = $("<div/>").attr("class","field");
+			this.field_wrapper = $("<div/>").attr("id","field-wrapper");
+
+			this.ru_base_part = $("<div/>").attr("id","base_part");
+			this.ru_region_part = $("<div/>").attr("id","region_part");
+			 
+			this.inputRuNumber = $("<input/>").attr("type","text").attr("name","number").addClass("keyboard_ru-number").attr("placeholder","A777AA").attr("maxlength","10");
+			this.inputRuRegion = $("<input/>").attr("type","text").attr("name","region").addClass("keyboard_ru-region").attr("placeholder","777").attr("maxlength","3");
+			
+			this.inputValue = $("<input/>").attr("type","hidden").attr("name","keyboard_ru_number").attr("id",this.options.inputId);
+			
+			this.ru_base_part.append(this.inputRuNumber);
+			this.ru_region_part.append(this.inputRuRegion);
+
+			this.field_wrapper.append(this.ru_base_part).append(this.ru_region_part);
+			this.field.append(this.field_wrapper);
+
+			this.keyboard_field.append(this.field);
+
+			if(this.options.showDesc && this.options.desc){
+				var descP = $("<p/>").attr("class","keyboard_input-info").html(this.options.desc);
+				this.keyboard_field.append(descP);
+			}
+
+			this.block.append(this.keyboard_field);
+			this.block.append(this.inputValue);
+
+			return this;
+		};
+
+
+
+
+
+		this.initPluginKeyboard = function(buttons){
+
+			var keyboardBlock = this.keyboardBlock;
+			var options = this.options;
+			jQuery.map(buttons,function(group){
+				var list = $("<ul/>");
+				jQuery.map(group,function(b,i){
+					var li = $("<li/>").attr("id","kv_"+b.value).attr("data-value",b.value).html(b.title);
+					if(i == 0) li.addClass("left_btn");
+					if(i == (group.length - 1)) li.addClass("right_btn");
+
+					var bg = b.hasOwnProperty("bg") && b.bg != "" ? b.bg : options.buttons_bg; 
+					li.addClass("color-"+bg);
+
+					list.append(li);
+				});
+				keyboardBlock.append(list);
+			});
+			
+			this.keyboardBlock = keyboardBlock;
+
+			this.block.append(this.keyboardBlock);
+
+			this.initHandlerEventKeyButton();
+			
+			return this.keyboardBlock;
+		};
+
+
+
+
+		this.validateNumber = function(number){
+			if(number){
+				var patterns = this.options.checkPatterns;
+				var p_l = patterns.length;
+				if(p_l){
+					var pattern = patterns.join("|");
+					var reg = new RegExp(pattern);
+					return this.options.isRuType ? reg.exec(number) :  reg.test(number);
+				}else{
+					return true;
+				}
+			}else{
+				return false;
+			}
+		};
+
+
+
+		this.validEvent = function(matches){
+			
+			var validCallback = this.options.validCallback;
+			if(typeof validCallback == "function") validCallback();
+
+			this.block.find("input").css("color",this.options.validColor);
+
+			if(matches){
+
+				var length = matches.length;
+				var groups = [];
+				for (var i = 0; i < length; i++) {
+					if(matches[i]){
+						groups.push(matches[i]);
+					}	
+				}
+						
+				if(groups.length){
+					var fullNumber = groups[0];
+					var regionNumber = groups[groups.length-1];
+					var number = fullNumber.substr(0, fullNumber.length - regionNumber.length);
+					//this.inputRuNumber.attr("maxlength",number.length);
+					this.inputRuNumber.val(number);
+					this.inputRuRegion.val(regionNumber);
+				}
+			}
+		};
+
+
+
+		this.unvalidEvent = function(){
+			var unvalidCallback = this.options.unvalidCallback;
+			if(typeof unvalidCallback == "function") unvalidCallback();
+
+			this.block.find("input").css("color",this.options.unvalidColor);
+		};
+
+
+
+		this.splitRuNumber = function(value){
+			if(this.options.isRuType && this.options.ruPattern.length){
+				var reg = new RegExp(this.options.ruPattern);
+				var matches = reg.exec(value);
+						
+				if(matches){
+					var length = matches.length;
+					var groups = [];
+					for (var i = 0; i < length; i++) {
+						if(matches[i]){
+							groups.push(matches[i]);
+						}	
+					}
+							
+					if(groups.length){
+						var fullNumber = groups[0];
+						var regionNumber = groups[groups.length-1];
+						var number = fullNumber.substr(0, fullNumber.length - regionNumber.length);
+							
+						this.inputRuNumber.val(number);
+						this.inputRuRegion.val(regionNumber);
+					}
+
+				}else{
+					this.inputRuNumber.val(value);
+					this.inputRuRegion.val("");
+				}
+			}
+		}
+
+
+		
+
+
+		this.initHandlerEventKeyButton = function(){
+
+			var context = this;
+
+			this.keyboardBlock.find("li").click(function(event){
+				var button_value = $(this).attr("data-value");
+				var input = context.inputValue;
+				var value = input.val();
+
+				if(button_value == "back"){
+					var l = value.length;
+					if(!l) return;
+					value = value.substring(0,l-1);
+					input.val(value);
+				}else if(button_value == "clear"){
+					value="";
+					input.val(value);
+				}else{
+					if(value.length >= context.options.maxValueLength)return;
+					value += button_value;
+					input.val(value);
+				}
+
+				value = value.toLocaleUpperCase();
+
+				var result = context.validateNumber(value);
+				
+				if(result){
+					context.validEvent(result);
+				}else{
+					context.unvalidEvent();
+					context.splitRuNumber(value);
+				}
+				
+				var changeCallback = context.options.changeCallback;
+				if(typeof changeCallback == "function") changeCallback();
+			});
+		}
+
+
+
+
+
+
+		this.setValue = function(value){
+			
+			if(this.inputValue.length){
+				this.inputValue.val(value);
+			}
+
+			var value = value.toLocaleUpperCase();
+			var result = this.validateNumber(value);
+			if(result){
+				this.validEvent(result);
+			}else{
+				this.unvalidEvent();
+				this.splitRuNumber(value);
+			}
+		}
+
+
+
+		this.getValue = function(){
+			if(this.inputValue.length){
+				return this.inputValue.val();
+			}
+		}
+
+
+		return this;
+ 	}
+ 	//Конец класса
+
+
+
+
+
+	
+
+
+	jQuery.fn.keyboard = function(options){
+		
 		var buttons = [
 			[
 				{title:"1",value:"1",bg:"blue"},
@@ -69,155 +387,23 @@
 			]
 		];
 
-		var keyboardBlock = $("<div/>").attr("id","keyboard").addClass("keyboard");
-		
-		jQuery.map(buttons,function(group){
-			var list = $("<ul/>");
-			jQuery.map(group,function(b,i){
-				var li = $("<li/>").attr("id","kv_"+b.value).attr("data-value",b.value).html(b.title);
-				if(i == 0) li.addClass("left_btn");
-				if(i == (group.length - 1)) li.addClass("right_btn");
-
-				var bg = b.hasOwnProperty("bg") && b.bg != "" ? b.bg : options.buttons_bg; 
-				li.addClass("color-"+bg);
-
-				list.append(li);
-			});
-			keyboardBlock.append(list);
-		});
-		
-
-		block.append(keyboardBlock);
-
-		keyboardBlock.find("li").click(function(event){
-				var v = $(this).attr("data-value");
-				var input = $("#keyboard-field input");
-				var value = input.val();
-				
-				if(v == "back"){
-					var l = value.length;
-					if(!l) return;
-					input.val(value.substring(0,l-1));
-				}else if(v == "clear"){
-					input.val("");
-				}else{
-					value +=v;
-					input.val(value);
-				}
-		});
-
-		return block;
-	};
-
-
-
-
-
-
-	jQuery.fn.keyboard_ru = function(options){
-		var block = this.eq(0);
-		if(!block.length) return;
-		block.html("");
-		block.addClass("keyboard-block");
-		options = jQuery.extend({
-			//Default properties
+		var userOptions = jQuery.extend({
+			//Default plugin properties
 			title: "ПОЖАЛУЙСТА,<br>ВВЕДИТЕ РЕГИСТРАЦИОННЫЙ НОМЕР АВТОМОБИЛЯ",
-			buttons_bg:"blue",
-			checkPatterns:{}
-		},options);
-		block.append($("<h3/>").html(options.title));
-		var keyboard_field = $("<div/>").attr("id","keyboard_ru-field");
-		var field = $("<div/>").attr("id","field");
-		var field_wrapper = $("<div/>").attr("id","field-wrapper");
-		var base_part = $("<div/>").attr("id","base_part");
-		var region_part = $("<div/>").attr("id","region_part");
-		 
-		
-		var inputLetter = $("<input/>").attr("type","text").attr("name","letter").attr("placeholder","A").attr("maxlength","1");
-		var inputNumber = $("<input/>").attr("type","text").attr("name","number").attr("placeholder","777").attr("maxlength","3");
-		var inputLetters = $("<input/>").attr("type","text").attr("name","letters").attr("placeholder","AA").attr("maxlength","2");
-		var inputRegion = $("<input/>").attr("type","text").attr("name","region").attr("placeholder","777").attr("maxlength","3");
-		
-		base_part.append(inputLetter).append(inputNumber).append(inputLetters);
-		region_part.append(inputRegion);
-
-		field_wrapper.append(base_part).append(region_part);
-		field.append(field_wrapper);
-		keyboard_field.append(field).append($("<p/>").attr("id","keyboard_ru-info").html("Используйте клавиатуру на экране"));
-		block.append(keyboard_field);
-
-		var buttons = [
-			[
-				{title:"1",value:"1",bg:"blue"},
-				{title:"2",value:"2",bg:"blue"},
-				{title:"3",value:"3",bg:"blue"},
-				{title:"4",value:"4",bg:"blue"},
-				{title:"5",value:"5",bg:"blue"},
-				{title:"a",value:"a",bg:"green"},
-				{title:"b",value:"b",bg:"green"},
-				{title:"c",value:"c",bg:"green"},
-				{title:"e",value:"e",bg:"green"},
-				{title:"k",value:"k",bg:"green"},
-				{title:"m",value:"m",bg:"green"},
-				{title:"c",value:"clear",bg:"clear"}
-			],
-			[
-				{title:"6",value:"6",bg:"blue"},
-				{title:"7",value:"7",bg:"blue"},
-				{title:"8",value:"8",bg:"blue"},
-				{title:"9",value:"9",bg:"blue"},
-				{title:"0",value:"0",bg:"blue"},
-				{title:"o",value:"o",bg:"green"},
-				{title:"h",value:"h",bg:"green"},
-				{title:"p",value:"p",bg:"green"},
-				{title:"t",value:"t",bg:"green"},
-				{title:"x",value:"x",bg:"green"},
-				{title:"y",value:"y",bg:"green"},
-				{title:"&lt;",value:"back",bg:"back"}
+			keyboardId:"keyboard",
+			checkPatterns:[
+				"^([A-Z0-9]{4,9})$"
 			]
-		];
+		},options);
 
-		var keyboardBlock = $("<div/>").attr("id","keyboard_ru").addClass("keyboard");
-		
-		jQuery.map(buttons,function(group){
-			var list = $("<ul/>");
-			jQuery.map(group,function(b,i){
-				var li = $("<li/>").attr("id","kv_"+b.value).attr("data-value",b.value).html(b.title);
-				if(i == 0) li.addClass("left_btn");
-				if(i == (group.length - 1)) li.addClass("right_btn");
+		var keyboardObj = new Keyboard(this.eq(0),userOptions);
 
-				var bg = b.hasOwnProperty("bg") && b.bg != "" ? b.bg : options.buttons_bg; 
-				li.addClass("color-"+bg);
+		keyboardObj.initPluginBlock();
 
-				list.append(li);
-			});
-			keyboardBlock.append(list);
-		});
-		
+		keyboardObj.initPluginKeyboard(buttons);
 
-		block.append(keyboardBlock);
-
-		keyboardBlock.find("li").click(function(event){
-				var v = $(this).attr("data-value");
-				var input = $("#keyboard_ru-field input");
-				var value = input.val();
-				
-				if(v == "back"){
-					var l = value.length;
-					if(!l) return;
-					input.val(value.substring(0,l-1));
-				}else if(v == "clear"){
-					input.val("");
-				}else{
-					value +=v;
-					input.val(value);
-				}
-		});
-
-		return block;
+		return keyboardObj;
 	};
-
-
 
 
 
@@ -225,23 +411,6 @@
 
 
 	jQuery.fn.keyboard_card = function(options){
-		var block = this.eq(0);
-		if(!block.length) return;
-		block.html("");
-		block.addClass("keyboard-block");
-		options = jQuery.extend({
-			//Default properties
-			title: "ПОЖАЛУЙСТА,<br>ВВЕДИТЕ бизнес номер карты",
-			buttons_bg:"blue",
-			checkPatterns:{}
-		},options);
-		block.append($("<h3/>").html(options.title));
-		var field = $("<div/>").attr("id","keyboard_card-field");
-		var input = $("<div/>").attr("id","input");
-		var oInput = $("<input/>").attr("type","text").attr("name","code").attr("id","input");
-		field.append(input.append(oInput));
-		field.append($("<p/>").attr("id","keyboard_card-info").html("Используйте клавиатуру на экране"));
-		block.append(field);
 
 		var buttons = [
 			[
@@ -262,43 +431,85 @@
 			]
 		];
 
-		var keyboardBlock = $("<div/>").attr("id","keyboard_card").addClass("keyboard");
-		
-		jQuery.map(buttons,function(group){
-			var list = $("<ul/>");
-			jQuery.map(group,function(b,i){
-				var li = $("<li/>").attr("id","kv_"+b.value).attr("data-value",b.value).html(b.title);
-				if(i == 0) li.addClass("left_btn");
-				if(i == (group.length - 1)) li.addClass("right_btn");
+		var userOptions = jQuery.extend({
+			//Default properties
+			title: "ПОЖАЛУЙСТА,<br>ВВЕДИТЕ бизнес номер карты",
+			keyboardId:"keyboard_card"
+		},options);
 
-				var bg = b.hasOwnProperty("bg") && b.bg != "" ? b.bg : options.buttons_bg; 
-				li.addClass("color-"+bg);
+		var keyboardObj = new Keyboard(this.eq(0),userOptions);
 
-				list.append(li);
-			});
-			keyboardBlock.append(list);
-		});
-		
+		keyboardObj.initPluginBlock();
 
-		block.append(keyboardBlock);
+		keyboardObj.initPluginKeyboard(buttons);
 
-		keyboardBlock.find("li").click(function(event){
-				var v = $(this).attr("data-value");
-				var input = $("#keyboard_card-field input");
-				var value = input.val();
-				
-				if(v == "back"){
-					var l = value.length;
-					if(!l) return;
-					input.val(value.substring(0,l-1));
-				}else if(v == "clear"){
-					input.val("");
-				}else{
-					value +=v;
-					input.val(value);
-				}
-		});
-
-		return block;
+		return keyboardObj;
 	};
+
+
+
+
+
+
+
+	jQuery.fn.keyboard_ru = function(options){
+		
+		var userOptions = jQuery.extend({
+			//Default properties
+			//Default properties
+			title: "ПОЖАЛУЙСТА,<br>ВВЕДИТЕ РЕГИСТРАЦИОННЫЙ НОМЕР АВТОМОБИЛЯ",
+			inputId:"keyboard_textbox",
+			keyboardId:"keyboard_ru",
+			isRuType:true,
+			maxValueLength:9,
+			checkPatterns:[
+				"^([А-Я]{1,1})([0-9]{3,3})([А-Я]{2,2})([17]?[0-9]{2})$",
+				"^([А-Я]{2,2})([0-9]{3,3})([А-Я]{1,1})([17]?[0-9]{2})$",
+				"^([0-9]{4,4})([А-Я]{2,2})([17]?[0-9]{2})$",
+				"^(([А-Я]{2,2})([0-9]{3,3}))([17]?[0-9]{2})$"
+			],
+			ruPattern:"^([А-Я0-9]{5,7})([17]?[0-9]{2,2})$"
+		},options);
+
+		var buttons = [
+			[
+				{title:"1",value:"1",bg:"blue"},
+				{title:"2",value:"2",bg:"blue"},
+				{title:"3",value:"3",bg:"blue"},
+				{title:"4",value:"4",bg:"blue"},
+				{title:"5",value:"5",bg:"blue"},
+				{title:"а",value:"а",bg:"green"},
+				{title:"в",value:"в",bg:"green"},
+				{title:"с",value:"с",bg:"green"},
+				{title:"е",value:"е",bg:"green"},
+				{title:"н",value:"н",bg:"green"},
+				{title:"к",value:"к",bg:"green"},
+				{title:"c",value:"clear",bg:"clear"}
+			],
+			[
+				{title:"6",value:"6",bg:"blue"},
+				{title:"7",value:"7",bg:"blue"},
+				{title:"8",value:"8",bg:"blue"},
+				{title:"9",value:"9",bg:"blue"},
+				{title:"0",value:"0",bg:"blue"},
+				{title:"м",value:"м",bg:"green"},
+				{title:"о",value:"о",bg:"green"},
+				{title:"р",value:"р",bg:"green"},
+				{title:"т",value:"т",bg:"green"},
+				{title:"х",value:"х",bg:"green"},
+				{title:"у",value:"у",bg:"green"},
+				{title:"&lt;",value:"back",bg:"back"}
+			]
+		];
+
+
+		var keyboardObj = new Keyboard(this.eq(0),userOptions);
+
+		keyboardObj.initPluginBlockForRu();
+
+		var keyboardBlock = keyboardObj.initPluginKeyboard(buttons);
+		
+		return keyboardObj;
+	};
+
 })(jQuery);

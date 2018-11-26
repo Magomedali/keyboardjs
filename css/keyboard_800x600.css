@@ -1,0 +1,326 @@
+
+input,
+div
+{
+	position: relative;
+}
+
+body{
+	background: black url(../images/bkg_800x600.jpg) no-repeat;
+	width: 800px;
+	height: 600px;
+	margin: 0px;
+	padding: 0px;
+	font-family: FuturaOrto, Arial;
+	font-size: 100%;
+}
+
+iframe
+{
+	border: none;
+    width: 800px;
+	height: 130px;
+}
+
+div#content{
+	position: absolute;
+	border: 0px solid red;
+	left:0px;
+	top:150px;
+	width: 800px;
+	height: 428px;
+	padding: 0;
+}
+
+
+#info{
+	margin: 0px auto;
+	width: 643px;
+    height: 300px;
+	background-image: url("../images/info_bkg_800x600.png");
+	background-repeat: no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    left: 78px;
+    top: -145px;
+    padding: 1px;
+}
+	
+	.keyboard-block{
+		text-align: center;
+		padding-top: 1px;
+	}
+
+	.keyboard-block h3{
+		text-transform: uppercase;
+	    text-align: center;
+	    font-family: sans-serif;
+	    margin: 16px 0px 10px;
+	    font-size: 15px;
+	    font-family: "futura bold",Arial;
+	}
+
+	#keyboard-field{
+		width: 626px;
+		margin: 0px auto 5px;
+		text-align: center;
+		padding: 13px 0px 5px;
+		border-top:1px solid #9c9a9a;
+		border-bottom:1px solid #9c9a9a; 
+	}
+	
+	#keyboard-field #input,#keyboard_card-field #input{
+		background: url("../images/prkm_800x600_fild_nmbr_other.png");
+		background-repeat: no-repeat; 
+	}
+
+		#input{
+			margin:0px auto;
+		    width: 246px;
+		    height: 55px;
+		    border:none;
+		    overflow: hidden;
+		    padding: 2px;
+		}
+
+			#input input {
+			    text-align: center;
+			   	width: 230px;
+			    height: 45px;
+			    display: block;
+			    margin: 4px auto;
+			    color: #b3b2b2;
+			    font-size: 36px;
+			    font-family: "FuturaOrto bold",Arial;
+			    border: none;
+			    background: none;
+			    text-transform: uppercase;
+			}
+
+			#input input:focus{
+				outline: none;
+			}
+
+	#keyboard_card-field,#keyboard_ru-field{
+		width: 626px;
+		margin: 0px auto 5px;
+		padding: 13px 0px 5px;
+		border-top:1px solid #9c9a9a;
+		border-bottom:1px solid #9c9a9a; 
+	}
+
+		.keyboard_input-info{
+			font-family: "FuturaOrto bold",Arial;
+			font-weight: bold;
+			font-size: 12px;
+			margin: 0px 0px 0px;
+			text-align: center;
+		}
+
+	
+
+	#keyboard_ru-field .field{
+			position: relative;
+			width: 246px;
+			height: 55px;
+			margin:0px auto;
+			background: #fff;
+			padding:0px 0px;
+			overflow: hidden;
+			background: url("../images/prkm_800x600_fild_nmbr_other2.png");
+			background-repeat: no-repeat; 
+			padding: 2px;
+		}
+
+
+			#keyboard_ru-field #field-wrapper{
+			   	width: 232px;
+			    height: 51px;
+			    display: block;
+			    margin: 1px auto;
+			    text-transform: uppercase;
+			    text-align: left;
+			}
+			
+			#keyboard_ru-field #field-wrapper:after{
+				content:"";
+				display: block;
+				clear: both;
+			}
+			
+			#keyboard_ru-field #field-wrapper input{
+				border: none;
+				outline: 0px solid #000;
+				padding: 0px;
+				text-align: center;
+
+				font-family: "FuturaOrto bold",Arial;
+				font-size: 30px;
+				font-weight: bold;
+				text-transform: uppercase;
+				color: #b3b2b2;
+				background: none;
+			}
+
+			
+
+			#keyboard_ru-field #base_part{
+				width: 172px;
+				height: 100%;
+				float: left;
+				display: block;
+				overflow: hidden;
+			}
+				#keyboard_ru-field #base_part input{
+					display: block;
+    				width: 100%;
+    				height: 100%;
+					padding-top: 10px;
+				}
+				
+				
+
+				#keyboard_ru-field #base_part input.keyboard_ru-number{
+					
+				}
+
+				#base_part input.keyboard_ru-letters{
+					width: 50px;
+				}
+
+				#keyboard_ru-field #base_part:after{
+					content:"";
+					display: block;
+					clear: both;
+				}
+			#keyboard_ru-field #region_part{
+				width: 60px;
+				height: 100%;
+				float: left;
+			}
+				
+				#keyboard_ru-field #region_part input{
+					width: 55px;
+					height: 30px;
+					font-size: 21px;
+					padding-top: 5px;
+				}
+
+				#keyboard_ru-field #region_part #region_flag{
+					display: block;
+					height: 23px;
+				}
+
+	#keyboard_card{
+    	width: 288px;
+	}
+
+	#keyboard_ru{
+		width: 577px;
+	}
+
+	#keyboard{
+		width: 626px;
+	}
+
+	.keyboard{
+		display: block;
+    	text-align: center;
+		margin: 0px auto;
+	}
+
+		.keyboard ul{
+			display: table;
+			margin:0px;
+			padding:0px;
+			clear: both;
+		}
+
+		.keyboard ul:after{
+			display: block;
+			content: "";
+			clear: both;
+		}
+
+			.keyboard ul li{
+				list-style: none;
+				display: block;
+    			float: left;
+				width: 48px;
+				height: 48px;
+				margin-right: 0px;
+				line-height: 48px;
+				text-transform: uppercase;
+				background-repeat: no-repeat;
+				background-position: 5px 5px;
+				text-align: center;
+				font-family: "FuturaOrto bold",Arial;
+				font-weight: bold;
+				color:white;
+				vertical-align: middle;
+				cursor: default;
+				font-size: 16px;
+			}
+
+
+.right_btn{
+	margin-right: 0px !important;
+}
+.left_btn{
+	margin-left: 0px !important;
+}
+
+.keyboard ul li.color-blue{
+	background-image: url("../images/on/prkm_800х600_btn_01.png");
+}
+.keyboard ul li.color-blue:hover{
+	background-image: url("../images/press/prkm_800х600_btn_01.png");
+}
+
+.keyboard ul li.color-blue{
+	background-image: url("../images/on/prkm_800х600_btn_01.png");
+}
+.keyboard ul li.color-blue:hover{
+	background-image: url("../images/press/prkm_800х600_btn_01.png");
+}
+
+
+#keyboard ul li.color-back{
+	color:black;
+	margin-right: 0px !important;
+	width: 97px !important;
+	background-image: url("../images/on/prkm_800х600_btn_back.png");
+}
+#keyboard ul li.color-back:hover{
+	background-image: url("../images/press/prkm_800х600_btn_back.png");
+}
+
+
+
+#keyboard_card ul li.color-back,#keyboard_ru ul li.color-back{
+	color:black;
+	background-image: url("../images/on/prkm_800х600_btn_back_small.png");
+}
+#keyboard_card ul li.color-back:hover,#keyboard_ru ul li.color-back:hover{
+	background-image: url("../images/press/prkm_800х600_btn_back_small.png");
+}
+
+
+
+.keyboard ul li.color-clear{
+	background-image: url("../images/on/prkm_800х600_btn_Cancel.png");
+}
+.keyboard ul li.color-clear:hover{
+	background-image: url("../images/press/prkm_800х600_btn_Cancel.png");
+}
+
+.keyboard ul li.color-green{
+	background-image: url("../images/on/prkm_800х600_btn_A.png");
+}
+.keyboard ul li.color-green:hover{
+	background-image: url("../images/press/prkm_800х600_btn_A.png");
+}
+
+.btn_back{
+	background-repeat: no-repeat; 
+}

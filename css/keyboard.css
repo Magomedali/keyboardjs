@@ -1,0 +1,362 @@
+
+@font-face {
+  font-family: 'futura bold';
+  src: url('../font/FuturaOrto-Bold.OTF');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'futura';
+  src: url('../font/FuturaOrto.OTF');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'futura italic';
+  src: url('../font/FuturaOrto-Italic.OTF');
+  font-weight: normal;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'futura bold italic';
+  src: url('../font/FuturaOrto-BoldItalic.OTF');
+  font-weight: bold;
+  font-style: italic;
+}
+
+
+input,
+div
+{
+	position: relative;
+}
+
+body{
+	background: black url(../images/bkg.jpg) no-repeat;
+	width: 1280px;
+	height: 1024px;
+	margin: 0px;
+	padding: 0px;
+	font-family: a_FuturaOrto, Arial;
+	font-size: 100%;
+}
+
+iframe
+{
+	border: none;
+    width: 1280px;
+	height: 207px;
+}
+
+#content{
+	position: absolute;
+	border: 0px solid red;
+	left:0px;
+	top:241px;
+	width: 1280px;
+	height: 684px;
+	padding: 0;
+}
+
+
+#info{
+	margin: 0px auto;
+	width: 1098px;
+    height: 512px;
+	background-image: url("../images/info_bkg.png");
+	background-repeat: no-repeat;
+    background-size: 100% 100%;
+    position: absolute;
+    left: 91px;
+    top: -215px;
+    padding: 1px;
+}
+	
+	.keyboard-block{
+		text-align: center;
+	}
+
+	.keyboard-block h3{
+		text-transform: uppercase;
+	    text-align: center;
+	    font-family: sans-serif;
+	    margin: 16px 0px 10px;
+	    font-size: 15px;
+	    font-family: "futura bold",Arial;
+	}
+
+	#keyboard-field{
+		width: 626px;
+		margin: 0px auto 10px;
+		text-align: center;
+		padding: 13px 0px;
+		border-top:1px solid #9c9a9a;
+		border-bottom:1px solid #9c9a9a; 
+	}
+
+		#input{
+			margin:0px auto;
+		    width: 245px;
+		    height: 50px;
+		    border:none;
+		    background: #fff;
+		    border-radius: 6px;
+		    -ms-border-radius: 6px;
+			-moz-border-radius: 6px;
+		    -webkit-border-radius: 6px;
+		    -khtml-border-radius: 6px;
+		    -o-border-radius: 6px;
+		    -icab-border-radius: 6px;
+		    overflow: hidden;
+		}
+
+			#input input {
+			    text-align: center;
+			   	width: 243px;
+			    height: 45px;
+			    display: block;
+			    margin: 4px auto;
+			    color: #b3b2b2;
+			    font-size: 36px;
+			    font-family: "Arial";
+			    border: none;
+			    background: #fff;
+			    border-radius: 6px;
+			    -ms-border-radius: 6px;
+			    -moz-border-radius: 6px;
+			    -webkit-border-radius: 6px;
+			    -khtml-border-radius: 6px;
+			    -o-border-radius: 6px;
+			    -icab-border-radius: 6px;
+			    box-shadow: 0px 2px 42px 0px #bbb;
+			    text-transform: uppercase;
+			}
+
+			#input input:focus{
+				outline: none;
+			}
+
+	#keyboard_card-field,#keyboard_ru-field{
+		width: 626px;
+		margin: 0px auto 10px;
+		text-align: left;
+		padding: 13px 0px;
+		border-top:1px solid #9c9a9a;
+		border-bottom:1px solid #9c9a9a; 
+	}
+
+		#keyboard_card-field #keyboard_card-info,#keyboard_ru-field #keyboard_ru-info{
+			font-family: "futura bold",Arial;
+			font-weight: bold;
+			font-size: 12px;
+			margin: 15px 0px 0px;
+		}
+
+
+	#keyboard_ru-field #field{
+			position: relative;
+			width: 246px;
+			height: 55px;
+			margin:0px auto;
+			background: #fff;
+			padding:0px 0px;
+			overflow: hidden;
+			background: url("../images/prkm_800х600_fild_nmbr_other2.png");
+			background-repeat: no-repeat; 
+			padding: 2px;
+		}
+
+		#keyboard_ru-field #field,#field-wrapper{
+			border-radius: 6px;
+			-ms-border-radius: 6px;
+			-moz-border-radius: 6px;
+			-webkit-border-radius: 6px;
+			-khtml-border-radius: 6px;
+			-o-border-radius: 6px;
+			-icab-border-radius: 6px;
+		}
+
+			#keyboard_ru-field #field-wrapper{
+			   	width: 232px;
+			    height: 51px;
+			    display: block;
+			    margin: 1px auto;
+			    text-transform: uppercase;
+			    text-align: left;
+			}
+			
+			#keyboard_ru-field #field-wrapper:after{
+				content:"";
+				display: block;
+				clear: both;
+			}
+			
+			#keyboard_ru-field #field-wrapper input{
+				border: none;
+				outline: 1px solid #000;
+				padding: 0px;
+				text-align: center;
+				font-family: "futura bold","Arial";
+				font-size: 30px;
+				font-weight: bold;
+				text-transform: uppercase;
+				color: #b3b2b2;
+				background: none;
+			}
+
+			#keyboard_ru-field #field-wrapper input:focus{
+				outline: 0px solid #000;
+			}
+
+			#keyboard_ru-field #base_part{
+				width: 172px;
+				height: 100%;
+				float: left;
+				display: block;
+				overflow: hidden;
+			}
+				#keyboard_ru-field #base_part input{
+					height: 100%;
+					float: left;
+					display: block;
+				}
+				
+				#keyboard_ru-field #base_part input[name='letter']{
+					width: 40px;
+				}
+
+				#keyboard_ru-field #base_part input[name='number']{
+					width: 70px;
+				}
+
+				#base_part input[name='letters']{
+					width: 50px;
+				}
+
+				#keyboard_ru-field #base_part:after{
+					content:"";
+					display: block;
+					clear: both;
+				}
+			#keyboard_ru-field #region_part{
+				width: 60px;
+				height: 100%;
+				float: left;
+			}
+				
+				#keyboard_ru-field #region_part input{
+					width: 100%;
+					height: 30px;
+					font-size: 21px;
+				}
+
+				#keyboard_ru-field #region_part #region_flag{
+					display: block;
+					height: 23px;
+				}
+
+
+	.keyboard{
+		display: inline-block;
+    	text-align: center;
+    	margin: 0px;
+	}
+
+		.keyboard ul{
+			/*display: block !important;*/
+
+			display: table;
+			margin:0px;
+			padding:0px;
+			clear: both;
+		}
+
+		.keyboard ul:after{
+			display: block;
+			content: "";
+			clear: both;
+		}
+
+			.keyboard ul li{
+				list-style: none;
+				display: block;
+    			float: left;
+				width: 48px;
+				height: 48px;
+				margin-right: 0px;
+				padding-top:15px; 
+				text-transform: uppercase;
+				background-repeat: no-repeat;
+				background-position: 5px 5px;
+				text-align: center;
+				font-family: "futura bold",Arial;
+				font-weight: bold;
+				color:white;
+				vertical-align: middle;
+				cursor: default;
+			}
+
+
+.right_btn{
+	margin-right: 0px !important;
+}
+.left_btn{
+	margin-left: 0px !important;
+}
+
+.keyboard ul li.color-blue{
+	background-image: url("../images/on/prkm_800х600_btn_01.png");
+}
+.keyboard ul li.color-blue:active{
+	background-image: url("../images/press/prkm_800х600_btn_01.png");
+}
+
+.keyboard ul li.color-blue{
+	background-image: url("../images/on/prkm_800х600_btn_01.png");
+}
+.keyboard ul li.color-blue:active{
+	background-image: url("../images/press/prkm_800х600_btn_01.png");
+}
+
+
+#keyboard ul li.color-back{
+	color:black;
+	margin-right: 0px !important;
+	width: 97px !important;
+	background-image: url("../images/on/prkm_800х600_btn_back.png");
+}
+#keyboard ul li.color-back:active{
+	background-image: url("../images/press/prkm_800х600_btn_back.png");
+}
+
+
+
+#keyboard_card ul li.color-back,#keyboard_ru ul li.color-back{
+	color:black;
+	background-image: url("../images/on/prkm_800х600_btn_back_small.png");
+}
+#keyboard_card ul li.color-back:active,#keyboard_ru ul li.color-back:active{
+	background-image: url("../images/press/prkm_800х600_btn_back_small.png");
+}
+
+
+
+.keyboard ul li.color-clear{
+	background-image: url("../images/on/prkm_800х600_btn_Cancel.png");
+}
+.keyboard ul li.color-clear:active{
+	background-image: url("../images/press/prkm_800х600_btn_Cancel.png");
+}
+
+.keyboard ul li.color-green{
+	background-image: url("../images/on/prkm_800х600_btn_A.png");
+}
+.keyboard ul li.color-green:active{
+	background-image: url("../images/press/prkm_800х600_btn_A.png");
+}
+
+.btn_back{
+	background-repeat: no-repeat; 
+}
